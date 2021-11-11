@@ -22,4 +22,7 @@ TODO:
    1. How to deploy 
 5. If obj will be too big we can use https://github.com/jmoiron/sqlx
 6. Rework Makefile (I should know CI/CD tool)
+7. Swagger?
+8. Jaeger?
+9. 
 

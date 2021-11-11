@@ -8,7 +8,8 @@ RUN  go mod download
 COPY . ./
 RUN ls
 ARG  GOFLAGS
-RUN $GOFLAGS go build -ldflags "-X main.Version=$(REV) -s -w" -o /src/bin/todo-app cmd/main.go
+ARG  VERSION
+RUN $GOFLAGS go build -ldflags "-X main.Version=$(VERSION) -s -w" -o /src/bin/todo-app cmd/main.go
 
 
 # Build runtime image.

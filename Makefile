@@ -2,8 +2,7 @@ DB_USER ?= postgres
 DB_PASSWORD ?= changeme
 DB_HOST ?= localhost
 DB_PORT ?= 5432
-#VERSION=`git rev-parse --short HEAD`
-VERSION?=1.0.0
+VERSION=`git rev-parse --short HEAD`
 
 # DATABASE
 recreate_database:
@@ -14,7 +13,7 @@ add_data_to_database:
 
 
 # GO APP
-integration-test:
+integration_test:
 	go test ./... -tags integration
 
 tidy:
@@ -49,8 +48,8 @@ create_db_for_test: recreate_database add_data_to_database
 
 run_test:
 	docker-compose -f postgre.yaml up --build -d
-	psql postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/postgres -f ./database/migrations/todo-database.sql
-	psql postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/postgres -f ./database/seeds/data.sql
+	make create_db_for_test
+	make integration_test
 	docker-compose -f postgre.yaml down
 
 
