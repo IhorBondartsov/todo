@@ -1,0 +1,45 @@
+version: '3.5'
+
+services:
+  postgres_container:
+    container_name: postgres_container
+    image: postgres
+    hostname: db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    networks:
+      - todonet
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  todo-app:
+    depends_on:
+      - postgres_container
+    build:
+      context: .
+    container_name: todo_microservice
+    networks:
+      - todonet
+    ports:
+      - "8080:8080"
+#    env_file:
+#      - docker.test.env
+    environment:
+      - APP_NAME=${APP_NAME}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - HOST=${HOST}
+      - PORT=${PORT}
+      - DB_DRIVER=${DB_DRIVER}
+      - DB_DSN=postgresql://postgres:changeme@db:5432/postgres?sslmode=disable
+
+volumes:
+  postgres:
+
+networks:
+  todonet:
+    driver: bridge
